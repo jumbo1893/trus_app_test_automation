@@ -4,6 +4,8 @@ import com.jumbo.trus.pages.BasePage;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 
+import static org.testng.Assert.assertTrue;
+
 public class RegistrationPage extends BasePage {
 
     public static final String VALID_MAIL = "valid_user@seznam.cz";
@@ -53,7 +55,9 @@ public class RegistrationPage extends BasePage {
     public UserInformationPage positiveSignUp(String name, String password) {
         fillLoginName(name);
         fillPassword(password);
-        return clickRegistrationPositive();
+        UserInformationPage userPage = clickRegistrationPositive();
+        assertTrue(userPage.isNameFieldDisplayed(), "Očekáváme zobrazení UserPage");
+        return userPage;
     }
 
     public RegistrationPage negativeSignUp(String name, String password) {

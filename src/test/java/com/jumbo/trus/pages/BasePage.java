@@ -1,12 +1,12 @@
 package com.jumbo.trus.pages;
 
 import com.jumbo.trus.pages.widget.CalendarPage;
+import com.jumbo.trus.util.CalendarDateTranslator;
 import io.appium.java_client.AppiumDriver;
 import io.github.ashwith.flutter.FlutterFinder;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class BasePage {
@@ -26,7 +26,23 @@ public class BasePage {
 
     protected WebElement scrollUntilVisible(WebElement inElement, String elementKey) {
         WebElement searchedElement = find.byValueKey(elementKey);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
+            WebElement returnElement = isElementPresent(searchedElement);
+            if (returnElement != null) {
+                return returnElement;
+            }
+            driver.executeScript("flutter:scroll", inElement, new HashMap<String, Object>() {{
+                put("dx", 50);
+                put("dy", -200);
+                put("durationMilliseconds", 500);
+            }});
+        }
+        return null;
+    }
+
+    protected WebElement scrollUntilVisibleByText(WebElement inElement, String elementText) {
+        WebElement searchedElement = find.byText(elementText);
+        for (int i = 0; i < 10; i++) {
             WebElement returnElement = isElementPresent(searchedElement);
             if (returnElement != null) {
                 return returnElement;
@@ -34,6 +50,22 @@ public class BasePage {
             driver.executeScript("flutter:scroll", inElement, new HashMap<String, Object>() {{
                 put("dx", 50);
                 put("dy", -400);
+                put("durationMilliseconds", 500);
+            }});
+        }
+        return null;
+    }
+
+    protected WebElement scrollHorizontallyUntilVisibleByText(WebElement inElement, String elementText) {
+        WebElement searchedElement = find.byText(elementText);
+        for (int i = 0; i < 15; i++) {
+            WebElement returnElement = isElementPresent(searchedElement);
+            if (returnElement != null) {
+                return returnElement;
+            }
+            driver.executeScript("flutter:scroll", inElement, new HashMap<String, Object>() {{
+                put("dx", -200);
+                put("dy", 0);
                 put("durationMilliseconds", 500);
             }});
         }
@@ -52,7 +84,7 @@ public class BasePage {
         return (WebElement) driver.executeScript("flutter:waitFor", find.byText(text), 2000);
     }
 
-    protected boolean isTextDisplayed(String text) {
+    public boolean isTextDisplayed(String text) {
         try {
             waitForText(text);
             return true;
@@ -90,7 +122,7 @@ public class BasePage {
 
     protected WebElement isElementPresent(WebElement element) {
         try {
-            return waitFor(element, 500);
+            return waitFor(element, 2000);
         } catch (Exception ignored) {
             return null;
         }
@@ -100,5 +132,10 @@ public class BasePage {
         CalendarPage calendarPage = new CalendarPage(driver);
         calendarPage.setDate(day, month, year);
         return this;
+    }
+
+    public boolean isCalendarTextDisplayed(LocalDate date) {
+        CalendarDateTranslator calendarDateTranslator = new CalendarDateTranslator();
+        return isTextDisplayed(calendarDateTranslator.getCalendarDay(date));
     }
 }

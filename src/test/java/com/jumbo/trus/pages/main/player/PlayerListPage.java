@@ -15,21 +15,23 @@ public class PlayerListPage extends MainPage {
         return waitFor(find.byValueKey("player_list"));
     }
 
-    private WebElement getMenuAddPlayer(String playerName) {
-        return scrollUntilVisible(find.byText(playerName), "player_list");
+    private WebElement getPlayerFromList(String playerName) {
+        return scrollUntilVisibleByText(find.byValueKey("player_list"), playerName);
     }
 
     public AddPlayerPage clickOnPlayer(String playerName) {
-        WebElement player = getMenuAddPlayer(playerName);
+        WebElement player = getPlayerFromList(playerName);
         if (player == null) {
             Assert.fail("Hráč " + playerName + " nenalezen");
         }
         player.click();
-        return new AddPlayerPage(driver);
+        AddPlayerPage addPlayerPage = new AddPlayerPage(driver);
+        Assert.assertTrue(addPlayerPage.isPlayerNameFieldDisplayed(), "Je očekáváno zobrazení obrazovky pro přidání/editaci hráče");
+        return addPlayerPage;
     }
 
     public boolean isPlayerDisplayed(String playerName) {
-        WebElement player = getMenuAddPlayer(playerName);
+        WebElement player = getPlayerFromList(playerName);
         return player != null;
     }
 

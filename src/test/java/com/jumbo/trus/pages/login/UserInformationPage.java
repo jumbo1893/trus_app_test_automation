@@ -5,10 +5,16 @@ import com.jumbo.trus.pages.main.home.HomePage;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 
+import static org.testng.Assert.assertTrue;
+
 public class UserInformationPage extends BasePage {
 
     public UserInformationPage(AppiumDriver<WebElement> driver) {
         super(driver);
+    }
+
+    private WebElement nameField() {
+        return find.byValueKey("name_text_field");
     }
 
     private WebElement getNameField() {
@@ -30,10 +36,12 @@ public class UserInformationPage extends BasePage {
     }
 
     public HomePage finishSignUp(String name) {
-        return fillLoginName(name).clickRegistration();
+        HomePage homePage = fillLoginName(name).clickRegistration();
+        assertTrue(homePage.isPlusButtonDisplayed(), "Očekáváme zobrazení HomePage");
+        return homePage;
     }
 
     public boolean isNameFieldDisplayed() {
-        return isElementDisplayed(getNameField());
+        return isElementDisplayed(nameField());
     }
 }

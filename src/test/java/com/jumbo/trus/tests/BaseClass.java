@@ -1,25 +1,18 @@
 package com.jumbo.trus.tests;
 
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.Assert;
 import org.testng.annotations.*;
 import io.github.ashwith.flutter.FlutterFinder;
-import io.github.ashwith.flutter.FlutterElement;
 import io.appium.java_client.AppiumDriver;
 
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BaseClass {

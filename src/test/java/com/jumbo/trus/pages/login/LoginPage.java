@@ -2,8 +2,12 @@ package com.jumbo.trus.pages.login;
 
 import com.jumbo.trus.pages.BasePage;
 import com.jumbo.trus.pages.main.home.HomePage;
+import com.jumbo.trus.pages.main.season.AddSeasonPage;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+
+import static org.testng.Assert.assertTrue;
 
 public class LoginPage extends BasePage {
 
@@ -61,8 +65,7 @@ public class LoginPage extends BasePage {
 
     public HomePage clickLoginPositive() {
         getLoginButton().click();
-        HomePage homePage = new HomePage(driver);
-        return homePage;
+        return new HomePage(driver);
     }
 
     public RegistrationPage clickRegister() {
@@ -81,6 +84,18 @@ public class LoginPage extends BasePage {
 
     public HomePage positiveLogin(String name, String password) {
         return fillLoginName(name).fillPassword(password).clickLoginPositive();
+    }
+
+    public HomePage loginToHomePage() {
+        HomePage homePage = positiveLogin(LoginPage.VALID_USER, LoginPage.VALID_USER_PASSWORD);
+        Assert.assertTrue(homePage.isPlusButtonDisplayed(), "Po přihlášení očekáváme HomePage");
+        return homePage;
+    }
+
+    public RegistrationPage navigateToRegistrationPage() {
+        RegistrationPage registrationPage = clickRegister();
+        assertTrue(registrationPage.isEmailFieldDisplayed(), "Očekáváme zobrazení RegistrationPage");
+        return registrationPage;
     }
 
     public LoginPage resetPassword(String name) {
@@ -112,7 +127,7 @@ public class LoginPage extends BasePage {
     }
 
     public boolean isLogoDisplayed() {
-        return isElementDisplayed(find.byValueKey("logo_image"), 5000);
+        return isElementDisplayed(find.byValueKey("logo_image"), 20000);
     }
 
 }

@@ -3,7 +3,9 @@ package com.jumbo.trus.pages.main.player;
 import com.jumbo.trus.pages.main.MainPage;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.reporters.jq.Main;
+import org.testng.Assert;
+
+import java.time.LocalDate;
 
 public class AddPlayerPage extends MainPage {
 
@@ -18,7 +20,11 @@ public class AddPlayerPage extends MainPage {
     }
 
     private WebElement getNameFieldButton() {
-        return waitFor(find.byValueKey("player_name_field_button"));
+        return waitFor(find.byValueKey("player_name_field_text_button"));
+    }
+
+    private WebElement getNameFieldRow() {
+        return waitFor(find.byValueKey("player_name_field"));
     }
 
     private WebElement getDateField() {
@@ -45,8 +51,9 @@ public class AddPlayerPage extends MainPage {
         return waitFor(find.byValueKey("delete_button"));
     }
 
-    private WebElement getDeleteConfirmButton() {
-        return waitFor(find.byText("OK"));
+    private AddPlayerPage clickDateButton() {
+        getDateFieldButton().click();
+        return this;
     }
 
     public AddPlayerPage fillNameField(String name) {
@@ -59,12 +66,7 @@ public class AddPlayerPage extends MainPage {
         return this;
     }
 
-    public AddPlayerPage clickDateButton() {
-        getDateFieldButton().click();
-        return this;
-    }
-
-    public MainPage clickOnConfirmButton() {
+    public AddPlayerPage clickOnConfirmButton() {
         getConfirmButton().click();
         return this;
     }
@@ -74,13 +76,9 @@ public class AddPlayerPage extends MainPage {
         return this;
     }
 
-    public AddPlayerPage clickOnConfirmDeleteButton() {
-        getDeleteConfirmButton().click();
-        return this;
-    }
-
-    public AddPlayerPage fillDateField(String name) {
-        getNameField().sendKeys(name);
+    public AddPlayerPage fillDateField(LocalDate date) {
+        getDateFieldButton().click();
+        setCalendarDate(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
         return this;
     }
 
@@ -90,5 +88,11 @@ public class AddPlayerPage extends MainPage {
 
     public boolean isPlayerNameFieldErrorTextDisplayed() {
         return isTextDisplayed("toto musíš vyplnit");
+    }
+
+    public AddPlayerPage checkCorrectTextInFields(LocalDate date, String playerName) {
+        Assert.assertTrue(isCalendarTextDisplayed(date), "Je očekáváno zobrazení datumu " + date.getDayOfMonth() + "." + date.getMonthValue() +  ". " + date.getYear() + " při přidání/editaci hráče");
+        Assert.assertTrue(isTextDisplayed(playerName), "Je očekáváno jména hráče " + playerName + " zvoleného při přidání");
+        return this;
     }
 }
